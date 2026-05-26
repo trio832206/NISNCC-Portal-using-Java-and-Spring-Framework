@@ -1,0 +1,5 @@
+Iniyan A,24104064@nec.edu.in,Amutha@1983,cadet,NEC,Approved
+Baalan P,ert@gmail.com,Amutha@1983,officer,NEC,Approved
+Java,1234el@gmail.com,1234,cadet,NEC,Approved
+Ini,123@nec.edu.in,123,officer,NEC,Approved
+Iniyan,fsj,123,cadet,NEC,Pending

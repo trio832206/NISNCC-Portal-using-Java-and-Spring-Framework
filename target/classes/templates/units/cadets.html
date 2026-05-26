@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Cadets in Unit — NCC Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="content-area">
+<div class="container">
+
+    <div class="page-title">
+        Cadets in Unit: <span th:text="${unit.unitName}">Unit Name</span>
+    </div>
+
+    <div class="action-bar">
+        <div>
+            <strong>Battalion:</strong> <span th:text="${unit.battalion}">Bn</span> &nbsp;|&nbsp;
+            <strong>State:</strong> <span th:text="${unit.state}">State</span> &nbsp;|&nbsp;
+            <strong>District:</strong> <span th:text="${unit.district}">District</span>
+        </div>
+        <a th:href="@{/units}" class="btn btn-secondary">&laquo; Back to Units</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(cadets)}" class="alert alert-info">
+        No cadets are assigned to this unit yet.
+    </div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(cadets)}">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cadet ID</th>
+                <th>Name</th>
+                <th>Rank</th>
+                <th>Email</th>
+                <th>Phone</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cadet, iter : ${cadets}">
+                <td th:text="${currentPage * 10 + iter.count}">1</td>
+                <td th:text="${cadet.cadetId}">NCC/2024/001</td>
+                <td th:text="${cadet.name}">Name</td>
+                <td th:text="${cadet.rank}">CADET</td>
+                <td th:text="${cadet.email}">email</td>
+                <td th:text="${cadet.phone ?: 'N/A'}">phone</td>
+                <td>
+                    <a th:href="@{/cadets/view/{id}(id=${cadet.id})}" class="btn btn-secondary btn-sm">View</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <ul class="pagination" th:if="${totalPages > 1}">
+        <li th:classappend="${currentPage == 0} ? 'disabled' : ''">
+            <a th:href="@{/units/{id}/cadets(id=${unit.id}, page=${currentPage - 1})}">&laquo;</a>
+        </li>
+        <li th:each="i : ${#numbers.sequence(0, totalPages - 1)}"
+            th:classappend="${i == currentPage} ? 'active' : ''">
+            <a th:href="@{/units/{id}/cadets(id=${unit.id}, page=${i})}" th:text="${i + 1}">1</a>
+        </li>
+        <li th:classappend="${currentPage >= totalPages - 1} ? 'disabled' : ''">
+            <a th:href="@{/units/{id}/cadets(id=${unit.id}, page=${currentPage + 1})}">&raquo;</a>
+        </li>
+    </ul>
+
+</div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

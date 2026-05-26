@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Mark Attendance — NCC Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="content-area">
+<div class="container">
+
+    <div class="page-title">Attendance &mdash; Mark Attendance</div>
+
+    <div th:if="${successMessage}" class="alert alert-success auto-dismiss" th:text="${successMessage}"></div>
+    <div th:if="${errorMessage}" class="alert alert-danger" th:text="${errorMessage}"></div>
+
+    <div style="display:flex;gap:10px;margin-bottom:12px;">
+        <a th:href="@{/attendance/mark}" class="btn btn-primary">Mark Attendance</a>
+        <a th:href="@{/attendance/report}" class="btn btn-secondary">View Report</a>
+        <a th:href="@{/reports/export/attendance}" class="btn btn-secondary">Export CSV</a>
+    </div>
+
+    <div class="form-container" style="max-width:500px;">
+        <h3 style="font-size:14px;margin-bottom:14px;color:#003580;">Mark Attendance for a Cadet</h3>
+
+        <form th:action="@{/attendance/mark}" th:object="${attendanceDTO}" method="post" class="no-double-submit">
+            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+            <div class="form-group">
+                <label for="cadetId" class="required">Select Cadet</label>
+                <div>
+                    <select id="cadetId" th:field="*{cadetId}" class="form-control"
+                            th:classappend="${#fields.hasErrors('cadetId')} ? ' is-invalid' : ''">
+                        <option value="">-- Select Cadet --</option>
+                        <option th:each="cadet : ${cadets}"
+                                th:value="${cadet.id}"
+                                th:text="${cadet.cadetId + ' - ' + cadet.name}">Cadet</option>
+                    </select>
+                    <span th:if="${#fields.hasErrors('cadetId')}" th:errors="*{cadetId}" class="invalid-feedback"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="date" class="required">Date</label>
+                <div>
+                    <input type="date" id="date" th:field="*{date}" class="form-control"
+                           th:classappend="${#fields.hasErrors('date')} ? ' is-invalid' : ''"/>
+                    <span th:if="${#fields.hasErrors('date')}" th:errors="*{date}" class="invalid-feedback"></span>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="type" class="required">Attendance Type</label>
+                <select id="type" th:field="*{type}" class="form-control">
+                    <option th:each="t : ${attendanceTypes}" th:value="${t}" th:text="${t}">PARADE</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="status" class="required">Status</label>
+                <select id="status" th:field="*{status}" class="form-control">
+                    <option th:each="s : ${attendanceStatuses}" th:value="${s}" th:text="${s}">PRESENT</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label for="remarks">Remarks</label>
+                <input type="text" id="remarks" th:field="*{remarks}" class="form-control"
+                       placeholder="Optional remarks"/>
+            </div>
+
+            <div class="form-group" style="margin-top:14px;border-top:1px solid #ddd;padding-top:12px;">
+                <label></label>
+                <button type="submit" class="btn btn-primary">Mark Attendance</button>
+            </div>
+        </form>
+    </div>
+
+</div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Access Denied — NCC Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+
+<main class="content-area">
+<div class="container">
+    <div class="error-page">
+        <div class="error-code" style="color:#c0392b;">403</div>
+        <h2>Access Denied</h2>
+        <p th:text="${errorMessage ?: 'You do not have permission to access this page. Please contact the administrator.'}">
+            You do not have permission to access this page.
+        </p>
+        <a href="javascript:history.back()" class="btn btn-secondary">Go Back</a>
+        <a href="/login" class="btn btn-primary">Go to Login</a>
+    </div>
+</div>
+</main>
+
+<div th:replace="~{fragments/layout :: footer}"></div>
+</body>
+</html>

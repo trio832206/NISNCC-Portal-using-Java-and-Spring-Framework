@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Certificates — NCC Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="content-area">
+<div class="container">
+
+    <div class="page-title">Certificate Management (A / B / C)</div>
+
+    <div th:if="${successMessage}" class="alert alert-success auto-dismiss" th:text="${successMessage}"></div>
+
+    <div class="action-bar">
+        <a th:href="@{/certificates/add}" class="btn btn-primary">+ Add Certificate Record</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(certificates)}" class="alert alert-info">No certificate records found.</div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(certificates)}">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Cadet ID</th>
+                <th>Cadet Name</th>
+                <th>Certificate Type</th>
+                <th>Result</th>
+                <th>Exam Date</th>
+                <th>Remarks</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cert, iter : ${certificates}">
+                <td th:text="${iter.count}">1</td>
+                <td th:text="${cert.cadet.cadetId}">NCC/2024/001</td>
+                <td th:text="${cert.cadet.name}">Name</td>
+                <td><strong th:text="'Certificate ' + ${cert.type}">A</strong></td>
+                <td>
+                    <span th:text="${cert.result}"
+                          th:classappend="${cert.result.name() == 'PASSED'} ? 'badge badge-passed' :
+                                          (${cert.result.name() == 'FAILED'} ? 'badge badge-failed' :
+                                          (${cert.result.name() == 'ELIGIBLE'} ? 'badge badge-eligible' :
+                                           'badge badge-pending'))"
+                          class="badge">PENDING</span>
+                </td>
+                <td th:text="${cert.examDate != null ? #temporals.format(cert.examDate, 'dd-MM-yyyy') : 'N/A'}">Date</td>
+                <td th:text="${cert.remarks ?: '-'}">-</td>
+                <td>
+                    <a th:href="@{/certificates/edit/{id}(id=${cert.id})}" class="btn btn-primary btn-sm">Edit</a>
+                    <a th:href="@{/certificates/delete/{id}(id=${cert.id})}"
+                       class="btn btn-danger btn-sm"
+                       data-confirm="Delete this certificate record?">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

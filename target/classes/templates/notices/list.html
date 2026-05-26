@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Notices — NCC Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="content-area">
+<div class="container">
+
+    <div class="page-title">Notice Board</div>
+
+    <div th:if="${successMessage}" class="alert alert-success auto-dismiss" th:text="${successMessage}"></div>
+
+    <div class="action-bar">
+        <a th:href="@{/notices/add}" class="btn btn-primary"
+           sec:authorize="hasAnyRole('ADMIN','OFFICER')">+ Post Notice</a>
+    </div>
+
+    <div th:if="${#lists.isEmpty(notices)}" class="alert alert-info">No notices available.</div>
+
+    <table class="data-table" th:unless="${#lists.isEmpty(notices)}">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Title</th>
+                <th>Message</th>
+                <th>Posted By</th>
+                <th>Date</th>
+                <th>Audience</th>
+                <th sec:authorize="hasAnyRole('ADMIN','OFFICER')">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="notice, iter : ${notices}">
+                <td th:text="${iter.count}">1</td>
+                <td><strong th:text="${notice.title}">Title</strong></td>
+                <td th:text="${#strings.abbreviate(notice.message, 80)}">Message</td>
+                <td th:text="${notice.postedBy}">Admin</td>
+                <td th:text="${#temporals.format(notice.postedDate, 'dd-MM-yyyy')}">Date</td>
+                <td th:text="${notice.targetRole}">ALL</td>
+                <td sec:authorize="hasAnyRole('ADMIN','OFFICER')">
+                    <a th:href="@{/notices/delete/{id}(id=${notice.id})}"
+                       class="btn btn-danger btn-sm"
+                       data-confirm="Delete this notice?">Delete</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

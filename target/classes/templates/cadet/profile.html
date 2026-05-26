@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>My Profile — NCC Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<div th:replace="~{fragments/layout :: header}"></div>
+<div th:replace="~{fragments/layout :: navbar}"></div>
+<main class="content-area">
+<div class="container">
+
+    <div class="page-title">My Profile</div>
+
+    <div th:if="${cadet != null}" class="profile-card">
+        <div class="profile-row">
+            <div class="profile-label">Cadet ID</div>
+            <div class="profile-value" th:text="${cadet.cadetId}">NCC/2024/001</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Full Name</div>
+            <div class="profile-value" th:text="${cadet.name}">Name</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Date of Birth</div>
+            <div class="profile-value" th:text="${cadet.dob != null ? #temporals.format(cadet.dob, 'dd-MM-yyyy') : 'N/A'}">DOB</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Gender</div>
+            <div class="profile-value" th:text="${cadet.gender}">MALE</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Father's Name</div>
+            <div class="profile-value" th:text="${cadet.fatherName ?: 'N/A'}">Father</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Email</div>
+            <div class="profile-value" th:text="${cadet.email}">email</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Phone</div>
+            <div class="profile-value" th:text="${cadet.phone ?: 'N/A'}">phone</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Address</div>
+            <div class="profile-value" th:text="${cadet.address ?: 'N/A'}">Address</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">College / School</div>
+            <div class="profile-value" th:text="${cadet.college ?: 'N/A'}">College</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Unit</div>
+            <div class="profile-value" th:text="${cadet.unit != null ? cadet.unit.unitName : 'Not Assigned'}">Unit</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Rank</div>
+            <div class="profile-value" th:text="${cadet.rank}">CADET</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Enrollment Date</div>
+            <div class="profile-value" th:text="${cadet.enrollmentDate != null ? #temporals.format(cadet.enrollmentDate, 'dd-MM-yyyy') : 'N/A'}">Date</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Blood Group</div>
+            <div class="profile-value" th:text="${cadet.bloodGroup ?: 'N/A'}">B+</div>
+        </div>
+        <div class="profile-row">
+            <div class="profile-label">Aadhaar</div>
+            <div class="profile-value" th:text="${cadet.aadhaarMasked ?: 'N/A'}">XXXX-XXXX-1234</div>
+        </div>
+    </div>
+
+    <div th:unless="${cadet != null}" class="alert alert-warning">
+        Cadet profile not found. Please contact the administrator.
+    </div>
+
+    <div style="margin-top:14px;">
+        <a th:href="@{/cadet/dashboard}" class="btn btn-secondary">&laquo; Back to Dashboard</a>
+    </div>
+
+</div>
+</main>
+<div th:replace="~{fragments/layout :: footer}"></div>
+<script th:src="@{/js/main.js}"></script>
+</body>
+</html>

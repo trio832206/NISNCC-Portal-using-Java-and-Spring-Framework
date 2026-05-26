@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <!-- Title is set by each page that includes this fragment -->
+    <title th:replace="~{::title}">NCC Portal</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <link rel="icon" type="image/x-icon" href="/favicon.ico"/>
+</head>
+<body>
+
+<!-- ============================================================
+     HEADER BAR (Portal branding)
+     ============================================================ -->
+<header class="portal-header" th:fragment="header">
+    <div class="portal-header-inner">
+        <!-- NCC Logo placeholder -->
+        <div style="width:60px;height:60px;background:#fff;border:2px solid #ff9800;
+                    display:flex;align-items:center;justify-content:center;
+                    font-size:22px;font-weight:bold;color:#003580;">NCC</div>
+        <div class="portal-title-block">
+            <h1>NCC Cadet Management Portal</h1>
+            <p>National Cadet Corps &mdash; Government of India &nbsp;|&nbsp; Integrated Software Portal</p>
+        </div>
+    </div>
+</header>
+
+<!-- ============================================================
+     NAVIGATION BAR (role-aware)
+     ============================================================ -->
+<nav class="navbar" th:fragment="navbar">
+    <ul>
+        <!-- Admin links -->
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/dashboard}">Dashboard</a>
+        </li>
+        <!-- Officer links -->
+        <li sec:authorize="hasRole('OFFICER')">
+            <a th:href="@{/officer/dashboard}">Dashboard</a>
+        </li>
+        <!-- Cadet links -->
+        <li sec:authorize="hasRole('CADET')">
+            <a th:href="@{/cadet/dashboard}">Dashboard</a>
+        </li>
+
+        <!-- Shared management links (Admin + Officer) -->
+        <li sec:authorize="hasAnyRole('ADMIN','OFFICER')">
+            <a th:href="@{/cadets}">Cadets</a>
+        </li>
+        <li sec:authorize="hasAnyRole('ADMIN','OFFICER')">
+            <a th:href="@{/units}">Units</a>
+        </li>
+        <li sec:authorize="hasAnyRole('ADMIN','OFFICER')">
+            <a th:href="@{/attendance/mark}">Attendance</a>
+        </li>
+        <li sec:authorize="hasAnyRole('ADMIN','OFFICER')">
+            <a th:href="@{/certificates}">Certificates</a>
+        </li>
+        <li sec:authorize="hasAnyRole('ADMIN','OFFICER')">
+            <a th:href="@{/camps}">Camps</a>
+        </li>
+
+        <!-- Notices (all roles) -->
+        <li sec:authorize="isAuthenticated()">
+            <a th:href="@{/notices}">Notices</a>
+        </li>
+
+        <!-- Reports (Admin + Officer) -->
+        <li sec:authorize="hasAnyRole('ADMIN','OFFICER')">
+            <a th:href="@{/reports}">Reports</a>
+        </li>
+
+        <!-- Admin: Officers management -->
+        <li sec:authorize="hasRole('ADMIN')">
+            <a th:href="@{/admin/officers}">Officers</a>
+        </li>
+
+        <!-- Cadet profile -->
+        <li sec:authorize="hasRole('CADET')">
+            <a th:href="@{/cadet/profile}">My Profile</a>
+        </li>
+
+        <!-- Logout -->
+        <li sec:authorize="isAuthenticated()" style="margin-left:auto;">
+            <a th:href="@{/logout}"
+               onclick="return confirm('Are you sure you want to logout?')">
+                Logout (<span sec:authentication="name">User</span>)
+            </a>
+        </li>
+    </ul>
+</nav>
+
+<!-- ============================================================
+     FOOTER
+     ============================================================ -->
+<footer class="portal-footer" th:fragment="footer">
+    <p>
+        &copy; 2024 National Cadet Corps &mdash; Government of India.
+        All rights reserved. &nbsp;|&nbsp;
+        NCC Cadet Management Portal v1.0
+    </p>
+</footer>
+
+<!-- ============================================================
+     LAYOUT FRAGMENT: full page layout wrapper
+     Usage: th:replace="~{fragments/layout :: layout(~{::title}, ~{::content})}"
+     ============================================================ -->
+<th:block th:fragment="layout(title, content)">
+    <!DOCTYPE html>
+    <html xmlns:th="http://www.thymeleaf.org"
+          xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+    <head>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <title th:replace="${title}">NCC Portal</title>
+        <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    </head>
+    <body>
+        <div th:replace="~{fragments/layout :: header}"></div>
+        <div th:replace="~{fragments/layout :: navbar}"></div>
+        <main class="content-area">
+            <div class="container">
+                <div th:replace="${content}"></div>
+            </div>
+        </main>
+        <div th:replace="~{fragments/layout :: footer}"></div>
+        <script th:src="@{/js/main.js}"></script>
+    </body>
+    </html>
+</th:block>
+
+</body>
+</html>
