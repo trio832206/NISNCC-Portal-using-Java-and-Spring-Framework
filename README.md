@@ -1,4 +1,3 @@
-$readme = @"
 # NISNCC — NCC Cadet Management Portal
 
 **NISNCC Replica** — A full-stack NCC Integrated Software Portal built with **Java 17**, **Spring Boot 3.2**, **Spring Security**, **Thymeleaf**, and **MySQL**.
@@ -307,6 +306,3 @@ This project is licensed under the MIT License.
 ---
 
 Built with pride for the National Cadet Corps of India.
-"@
-[System.IO.File]::WriteAllText("$PWD\README.md", $readme, [System.Text.Encoding]::UTF8)
-Write-Host "README.md written successfully. Lines: $($readme.Split("`n").Count)"
